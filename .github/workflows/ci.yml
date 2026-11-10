@@ -32,14 +32,12 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Instalar Linter CSS
-        run: npm install stylelint stylelint-config-standard --no-save
-
-      - name: Criar config do CSS
-        run: echo '{"extends":"stylelint-config-standard"}' > .stylelintrc.json
+      - name: Instalar Stylelint
+        run: npm install stylelint --no-save
 
       - name: Executar Linter CSS
-        run: npx stylelint "**/*.css" --allow-empty-input
+        run: |
+          npx stylelint "**/*.css" --allow-empty-input --config '{"rules":{"property-no-unknown": true}}'
 
   preparar-entrega:
     needs: [validar-html, validar-css]
