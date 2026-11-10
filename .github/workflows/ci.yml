@@ -1,0 +1,52 @@
+name: Esteira CI - HTML e CSS
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  validar-html:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Executar Linter HTML
+        run: npx htmlhint "**/*.html"
+
+  validar-css:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Instalar Linter CSS
+        run: npm install stylelint stylelint-config-standard --no-save
+
+      - name: Executar Linter CSS
+        run: npx stylelint "**/*.css"
+
+  preparar-entrega:
+    needs: [validar-html, validar-css]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v4
+
+      - name: Criar pasta dist
+        run: |
+          mkdir -p dist
+          cp -r *.html *.css dist/ 2>/dev/null || true
+          ls -la dist
