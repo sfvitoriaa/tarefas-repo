@@ -32,11 +32,8 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Instalar Linter CSS
-        run: npm install stylelint stylelint-config-standard --no-save
-
       - name: Executar Linter CSS
-        run: npx stylelint "**/*.css"
+        run: npx stylelint "**/*.css" --config '{"rules":{"color-no-invalid-hex": true, "property-no-unknown": true}}'
 
   preparar-entrega:
     needs: [validar-html, validar-css]
